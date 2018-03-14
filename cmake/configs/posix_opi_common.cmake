@@ -5,9 +5,9 @@
 # This definition allows to differentiate if this just the usual POSIX build
 # or if it is for the RPi.
 add_definitions(
-	-D__PX4_POSIX_RPI
+	-D__PX4_POSIX_OPI
 	-D__DF_LINUX # For DriverFramework
-	-D__DF_RPI # For DriverFramework
+	-D__DF_OPI # For DriverFramework
 )
 
 
@@ -15,21 +15,21 @@ set(config_module_list
 	#
 	# Board support modules
 	#
-	drivers/airspeed
-	#drivers/barometer
-	drivers/batt_smbus
+	#drivers/airspeed
+	drivers/barometer
+	#drivers/batt_smbus
 	drivers/device
-	drivers/differential_pressure
-	drivers/distance_sensor
-	#drivers/telemetry
+	#drivers/differential_pressure
+	#drivers/distance_sensor
+	drivers/telemetry
 
 	modules/sensors
 
-	platforms/posix/drivers/df_hmc5883_wrapper
-	platforms/posix/drivers/df_isl29501_wrapper
-	platforms/posix/drivers/df_lsm9ds1_wrapper
+	#platforms/posix/drivers/df_hmc5883_wrapper
+	#platforms/posix/drivers/df_isl29501_wrapper
+	#platforms/posix/drivers/df_lsm9ds1_wrapper
 	platforms/posix/drivers/df_mpu9250_wrapper
-	platforms/posix/drivers/df_ms5611_wrapper
+	#platforms/posix/drivers/df_ms5611_wrapper
 	platforms/posix/drivers/df_trone_wrapper
 
 	#
@@ -113,9 +113,10 @@ set(config_module_list
 #
 set(config_df_driver_list
 	mpu9250
-	lsm9ds1
-	ms5611
-	hmc5883
+	bmp280
+	#lsm9ds1
+	#ms5611
+	#hmc5883
 	trone
-	isl29501
+	#isl29501
 )

@@ -25,7 +25,7 @@
 	branch = master
 [submodule "src/lib/DriverFramework"]
 	path = src/lib/DriverFramework
-	url = https://github.com/PX4/DriverFramework.git
+	url = https://github.com/serkanyilmaz/DriverFramework.git
 	branch = master
 [submodule "src/lib/ecl"]
 	path = src/lib/ecl

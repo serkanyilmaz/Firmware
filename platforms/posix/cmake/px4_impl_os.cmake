@@ -276,6 +276,31 @@ function(px4_os_add_flags)
 				-L${CXX_COMPILER_PATH}/arm-linux-gnueabihf/libc/usr/lib
 			)
 		ENDIF()
+	elseif ("${BOARD}" STREQUAL "opi")
+		set(OPI_COMPILE_FLAGS -mtune=cortex-a53 -march=aarch64)
+		list(APPEND added_c_flags ${OPI_COMPILE_FLAGS})
+		list(APPEND added_cxx_flags ${OPI_COMPILE_FLAGS})
+
+		find_program(CXX_COMPILER_PATH ${CMAKE_CXX_COMPILER})
+
+		GET_FILENAME_COMPONENT(CXX_COMPILER_PATH ${CXX_COMPILER_PATH} DIRECTORY)
+		GET_FILENAME_COMPONENT(CXX_COMPILER_PATH "${CXX_COMPILER_PATH}/../" ABSOLUTE)
+
+		IF ("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
+			set(CLANG_COMPILE_FLAGS
+				--target=aarch64-linux-gnu
+				-ccc-gcc-name aarch64-linux-gnu-gcc
+				--sysroot=${CXX_COMPILER_PATH}/aarch64-linux-gnu/libc
+				-I${CXX_COMPILER_PATH}/aarch64-linux-gnu/libc/usr/include/
+			)
+
+			list(APPEND added_c_flags ${CLANG_COMPILE_FLAGS})
+			list(APPEND added_cxx_flags ${CLANG_COMPILE_FLAGS})
+			list(APPEND added_exe_linker_flags ${POSIX_CMAKE_EXE_LINKER_FLAGS} ${CLANG_COMPILE_FLAGS}
+				-B${CXX_COMPILER_PATH}/aarch64-linux-gnu/libc/usr/lib
+				-L${CXX_COMPILER_PATH}/aarch64-linux-gnu/libc/usr/lib
+			)
+		ENDIF()
 	endif()
 
 	# output

@@ -73,6 +73,14 @@ if ("${BOARD}" STREQUAL "rpi")
 		USES_TERMINAL
 		)
 
+elseif ("${BOARD}" STREQUAL "opi")
+	add_custom_target(upload
+		COMMAND scp -r $<TARGET_FILE:px4> ${PX4_SOURCE_DIR}/posix-configs/opi/*.config ${PX4_SOURCE_DIR}/ROMFS pi@navio:/home/pi
+		DEPENDS px4
+		COMMENT "uploading px4"
+		USES_TERMINAL
+		)
+
 elseif ("${BOARD}" STREQUAL "bebop")
 
 	add_custom_target(upload

@@ -59,34 +59,9 @@
 
 #define STATE_TIMEOUT 10000000 // [us] Maximum time to spend in any state
 
-PrecLand::PrecLand(Navigator *navigator, const char *name) :
-	MissionBlock(navigator, name),
-	_targetPoseSub(0),
-	_target_pose_valid(false),
-	_state_start_time(0),
-	_search_cnt(0),
-	_approach_alt(0),
-	_param_timeout(this, "PLD_BTOUT", false),
-	_param_hacc_rad(this, "PLD_HACC_RAD", false),
-	_param_final_approach_alt(this, "PLD_FAPPR_ALT", false),
-	_param_search_alt(this, "PLD_SRCH_ALT", false),
-	_param_search_timeout(this, "PLD_SRCH_TOUT", false),
-	_param_max_searches(this, "PLD_MAX_SRCH", false),
-	_param_acceleration_hor(this, "MPC_ACC_HOR", false),
-	_param_xy_vel_cruise(this, "MPC_XY_CRUISE", false)
-
-{
-	/* load initial params */
-	updateParams();
-
-}
-
-PrecLand::~PrecLand()
-{
-}
-
-void
-PrecLand::on_inactive()
+PrecLand::PrecLand(Navigator *navigator) :
+	MissionBlock(navigator),
+	ModuleParams(navigator)
 {
 }
 
@@ -141,7 +116,7 @@ PrecLand::on_active()
 		_target_pose_valid = true;
 	}
 
-	if (hrt_absolute_time() - _target_pose.timestamp > (uint64_t)(_param_timeout.get()*SEC2USEC)) {
+	if ((hrt_elapsed_time(&_target_pose.timestamp) / 1e-6f) > _param_timeout.get()) {
 		_target_pose_valid = false;
 	}
 
@@ -292,7 +267,6 @@ PrecLand::run_state_horizontal_approach()
 	pos_sp_triplet->current.type = position_setpoint_s::SETPOINT_TYPE_POSITION;
 
 	_navigator->set_position_setpoint_triplet_updated();
-
 }
 
 void
@@ -330,7 +304,6 @@ PrecLand::run_state_descend_above_target()
 	pos_sp_triplet->current.type = position_setpoint_s::SETPOINT_TYPE_LAND;
 
 	_navigator->set_position_setpoint_triplet_updated();
-
 }
 
 void
